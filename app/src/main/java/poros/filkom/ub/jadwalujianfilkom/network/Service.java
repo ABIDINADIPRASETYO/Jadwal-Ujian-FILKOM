@@ -33,6 +33,9 @@ public interface Service {
     @GET("class.php")
     Call<String> jadwal(@Header("Cookie") String cookie);
 
-    @GET("jadwal.JSON")
+    @GET("uts.JSON")
     Call<JadwalResponse> getJadwalUAS();
+
+    @GET("test.txt")
+    Call<String> getJadwalUtsTxt();
 }

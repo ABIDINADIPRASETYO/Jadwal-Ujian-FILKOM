@@ -251,8 +251,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 //Toast.makeText(LoginActivity.this, String.valueOf(jadwals.size()), Toast.LENGTH_SHORT).show();
                 for (int k = 0; k < jadwals.size(); k++) {
-                   // Toast.makeText(LoginActivity.this, jadwals.get(k).getMatkul(), Toast.LENGTH_SHORT).show();
-                    //Log.d("hmm jadwal", "onResponse: "+jadwals.get(k).getMatkul());
                 }
 
                 Bundle args = new Bundle();
