@@ -381,7 +381,7 @@ public class JadwalFragment extends Fragment {
                             Log.d(TAG, "getJadwal: daysenin");
 
                             DetailJadwal detailJadwal = new DetailJadwal();
-                            detailJadwal.setHari(daftarHari[count]);
+                            detailJadwal.setHari(daftarHari[count-1]);
                             detailJadwal.setJam("07.30 - 09.30");
                             detailJadwal.setKelas(kelas);
                             detailJadwal.setMatkul(matkul);
@@ -397,7 +397,7 @@ public class JadwalFragment extends Fragment {
                             Log.d(TAG, "uts " + x + " " + column[6].trim());
 
                             DetailJadwal detailJadwal = new DetailJadwal();
-                            detailJadwal.setHari(daftarHari[count]);
+                            detailJadwal.setHari(daftarHari[count-1]);
                             detailJadwal.setJam("09.30 - 11.30");
                             detailJadwal.setKelas(kelas);
                             detailJadwal.setMatkul(matkul);
@@ -413,7 +413,7 @@ public class JadwalFragment extends Fragment {
                             Log.d(TAG, "uts " + x + " " + column[9].trim());
 
                             DetailJadwal detailJadwal = new DetailJadwal();
-                            detailJadwal.setHari(daftarHari[count]);
+                            detailJadwal.setHari(daftarHari[count-1]);
                             detailJadwal.setJam("13.00 - 15.00");
                             detailJadwal.setKelas(kelas);
                             detailJadwal.setMatkul(matkul);
