@@ -13,9 +13,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -71,6 +74,7 @@ public class JadwalFragment extends Fragment {
         initBundle();
         jadwalAdapter = new JadwalAdapter(getContext());
 
+
         sharedPreferences = getContext().getSharedPreferences("jadwal", MODE_PRIVATE);
         if (sharedPreferences.getBoolean("offline", false)) {
             //Toast.makeText(getContext(), "off", Toast.LENGTH_SHORT).show();
@@ -116,147 +120,6 @@ public class JadwalFragment extends Fragment {
         prodi = sharedPreferences.getString("prodi", "no prodi");
     }
 
-    private void loadJadwal(JadwalResponse jadwalResponse) {
-        //JadwalResponse jadwalResponse = response.body();
-        int ke = 0;
-        for (int h = 0; h < jadwalResponse.getPages().size(); h++) {
-            Log.d("zxcvzxcv", "loadJadwal: size" + jadwalResponse.getPages() + jadwalResponse.getPages().size());
-            //for (int h = 0; h < jadwalResponse.getPages().size(); h++) {
-            for (int i = 1; i < jadwalResponse.getPages().get(h).getTables().get(0).getCells().size(); i++) {
-                ArrayList<Cell> cell = (ArrayList<Cell>) jadwalResponse.getPages().get(h).getTables().get(0).getCells();
-                if (cell.get(i).getI() <= 2) {
-
-                } else {
-                    if (cell.get(i).getJ().toString().equals("1")) {
-                        ruangan = cell.get(i).getContent();
-                    }
-                    switch (prodi) {
-                        case "Magister Ilmu Komputer":
-                            prodi = "MIK";
-                            break;
-                        case "Teknik Informatika":
-                            prodi = "TIF";
-                            break;
-                        case "Teknik Komputer":
-                            prodi = "TEKOM";
-                            break;
-                        case "Pendidikan Teknologi Informasi":
-                            prodi = "PTI";
-                            break;
-                        case "Sistem Informasi":
-                            prodi = "SI";
-                            break;
-                        case "Teknologi Informasi":
-                            prodi = "TI";
-                            break;
-                    }
-
-                    switch (cell.get(i).getJ().toString()) {
-                        case "3":
-                            Log.d(TAG, "getji"+cell.get(i).getI().toString());
-                            Log.d(TAG, "getjj"+cell.get(i).getJ().toString());
-                            Log.d(TAG, "getjc"+cell.get(i).getContent().trim());
-                            jadwalDouble.clear();
-                            for (int j = 0; j < jadwals.size(); j++) {
-                                jadwalDouble.add(jadwals.get(j).getMatkul().trim());
-                                int count = 0;
-                                for (int z = 0; z < jadwalDouble.size(); z++) {
-                                    if (jadwalDouble.get(z).equals(cell.get(i).getContent().trim())) {
-                                        count++;
-                                    }
-                                }
-                                if ( count <= 1 &&
-                                        prodi.equals(cell.get(i-1).getContent().trim()) &&
-                                        jadwals.get(j).getMatkul().trim().equals(cell.get(i).getContent().trim()) &&
-                                        jadwals.get(j).getKelas().trim().equals(cell.get(i+1).getContent().trim())) {
-                                    Log.d(TAG, "JA Ruangan: "+ruangan);
-                                    Log.d(TAG, "JA Matkul: "+cell.get(i).getContent());
-                                    Log.d(TAG, "JA kelas: "+cell.get(i+1).getContent());
-                                    DetailJadwal detailJadwal = new DetailJadwal();
-                                    detailJadwal.setHari(daftarHari[h]);
-                                    detailJadwal.setJam("08.00 - 09.30");
-                                    detailJadwal.setKelas(cell.get(i+1).getContent());
-                                    detailJadwal.setMatkul(cell.get(i).getContent());
-                                    detailJadwal.setRuang(ruangan);
-                                    jadwalKu.add(ke, detailJadwal);
-                                    ke++;
-                                }
-                            }
-                            break;
-                        case "6":
-                            jadwalDouble.clear();
-                            for (int j = 0; j < jadwals.size(); j++) {
-                                Log.d(TAG, "matkul m loadJadwal: "+jadwals.get(j).getMatkul().trim());
-                                jadwalDouble.add(jadwals.get(j).getMatkul().trim());
-                                int count = 0;
-                                for (int z = 0; z < jadwalDouble.size(); z++) {
-                                    if (jadwalDouble.get(z).equals(cell.get(i).getContent().trim())) {
-                                        count++;
-                                    }
-                                }
-                                if (jadwals.get(j).getMatkul().trim().equals(cell.get(i).getContent().trim())) {
-                                    Log.d(TAG, "matkul x loadJadwal: "+jadwals.get(j).getMatkul().trim());
-                                    Log.d(TAG, "matkul loadJadwal: "+cell.get(i).getContent().trim());
-                                }
-                                if ( count <= 1 &&
-                                        prodi.equals(cell.get(i-1).getContent().trim()) &&
-                                        jadwals.get(j).getMatkul().trim().equals(cell.get(i).getContent().trim()) &&
-                                        jadwals.get(j).getKelas().trim().equals(cell.get(i+1).getContent().trim())) {
-                                    Log.d(TAG, "JA Ruangan: "+ruangan);
-                                    Log.d(TAG, "JA Matkul: "+cell.get(i).getContent());
-                                    Log.d(TAG, "JA kelas: "+cell.get(i+1).getContent());
-                                    DetailJadwal detailJadwal = new DetailJadwal();
-                                    detailJadwal.setHari(daftarHari[h]);
-                                    if (daftarHari[h].equals("Jumat, 25 Mei")) {
-                                        detailJadwal.setJam("09.30 - 11.00");
-                                    } else {
-                                        detailJadwal.setJam("10.00 - 11.30");
-                                    }
-                                    detailJadwal.setKelas(cell.get(i+1).getContent());
-                                    detailJadwal.setMatkul(cell.get(i).getContent());
-                                    detailJadwal.setRuang(ruangan);
-                                    jadwalKu.add(ke, detailJadwal);
-                                    ke++;
-                                }
-                            }
-                            break;
-                        case "9":
-                            jadwalDouble.clear();
-                            for (int j = 0; j < jadwals.size(); j++) {
-                                jadwalDouble.add(jadwals.get(j).getMatkul().trim());
-                                int count = 0;
-                                for (int z = 0; z < jadwalDouble.size(); z++) {
-                                    if (jadwalDouble.get(z).equals(cell.get(i).getContent().trim())) {
-                                        count++;
-                                    }
-                                }
-                                if ( count <= 1 &&
-                                        prodi.equals(cell.get(i-1).getContent().trim()) &&
-                                        jadwals.get(j).getMatkul().trim().equals(cell.get(i).getContent().trim()) &&
-                                        jadwals.get(j).getKelas().trim().equals(cell.get(i+1).getContent().trim())) {
-                                    Log.d(TAG, "JA Ruangan: "+ruangan);
-                                    Log.d(TAG, "JA Matkul: "+cell.get(i).getContent());
-                                    Log.d(TAG, "JA kelas: "+cell.get(i+1).getContent());
-                                    DetailJadwal detailJadwal = new DetailJadwal();
-                                    detailJadwal.setHari(daftarHari[h]);
-                                    detailJadwal.setJam("13.00 - 14.30");
-                                    detailJadwal.setKelas(cell.get(i+1).getContent());
-                                    detailJadwal.setMatkul(cell.get(i).getContent());
-                                    detailJadwal.setRuang(ruangan);
-                                    jadwalKu.add(ke, detailJadwal);
-                                    ke++;
-                                }
-                            }
-                            break;
-                    }
-                }
-            }
-
-        }
-        jadwalAdapter.notifyDataSetChanged();
-    }
-
-
     private void getJadwalOff() {
         jadwalKu.clear();
         sharedPreferences = getContext().getSharedPreferences("jadwal", MODE_PRIVATE);
@@ -269,7 +132,7 @@ public class JadwalFragment extends Fragment {
         Log.d(TAG, "getJadwalOff: "+jadwalUas);
         JadwalResponse jadwalResponse = gson.fromJson(jadwalUas, JadwalResponse.class);
         Log.d(TAG, "gaaetJadwalOff: aa"+jadwalResponse.getPages().get(0).getTables().get(0).getCells().get(0).getI());
-        loadJadwal(jadwalResponse);
+        //loadJadwal(jadwalResponse);
 
     }
 
@@ -299,13 +162,6 @@ public class JadwalFragment extends Fragment {
                 dataUts[count][countLine] = lines;
                 Log.d(TAG, "getJadwal: linee"+lines);
                 countLine++;
-
-//            for (int j = 0; j < 10; j++) {
-//
-//                Log.d(TAG, "uts " + i + " " + j + " " + column[j].trim());
-                //}
-
-
             }
         } catch (IOException e) {
             //log the exception
@@ -321,6 +177,8 @@ public class JadwalFragment extends Fragment {
 
         count = 0;
         countLine = 0;
+
+        jadwalKu.clear();
 
         prodi = sharedPreferences.getString("prodi", "no prodi");
 
@@ -348,9 +206,11 @@ public class JadwalFragment extends Fragment {
 
         for (int i = 0; i < jadwals.size(); i++) {
             Log.d(TAG, "getJadwal: jadwalsku"+jadwals.get(i).getMatkul());
+            Log.d(TAG, "getJadwal: jadwalsku"+jadwals.get(i).getKelas());
         }
 
         Log.d(TAG, "uts prodi " + prodi );
+        Log.d(TAG, "getJadwal: totalJadwal"+jadwals.size());
         int ke = 0;
         for (int x = 1; x < 11; x ++) {
 
@@ -373,6 +233,10 @@ public class JadwalFragment extends Fragment {
                         String kelas = jadwals.get(l).getKelas().trim();
                         Log.d(TAG, "uts p" + x + " " + prodi);
 
+                        if (column[5].trim().equals("Administrasi Sistem Server")) {
+                            Log.d(TAG, "getJadwal: lkajsdflkasjdflasdkjf"+column[5].trim() + column[6].trim());
+                        }
+
                         if (prodi.equals(column[1].trim()) && matkul.equals(column[2].trim()) && kelas.equals(column[3].trim())) {
                             Log.d(TAG, "uts " + x + " " + column[1].trim());
                             Log.d(TAG, "uts " + x + " " + column[2].trim());
@@ -391,7 +255,10 @@ public class JadwalFragment extends Fragment {
                             break;
                         } else
 
-                        if (matkul.equals(column[5].trim()) && kelas.equals(column[6].trim())) {
+                        if (prodi.equals(column[4].trim()) && matkul.equals(column[5].trim()) && kelas.equals(column[6].trim())) {
+                            Log.d(TAG, "getJadwal: prodd"+prodi);
+                            Log.d(TAG, "getJadwal: prodduts"+column[4].trim());
+                            Log.d(TAG, "getJadwal: proddu============");
                             Log.d(TAG, "uts " + x + " " + column[4].trim());
                             Log.d(TAG, "uts " + x + " " + column[5].trim());
                             Log.d(TAG, "uts " + x + " " + column[6].trim());
@@ -407,7 +274,7 @@ public class JadwalFragment extends Fragment {
                             break;
                         } else
 
-                        if (matkul.equals(column[8].trim()) && kelas.equals(column[9].trim())) {
+                        if (prodi.equals(column[7].trim()) && matkul.equals(column[8].trim()) && kelas.equals(column[9].trim())) {
                             Log.d(TAG, "uts " + x + " " + column[7].trim());
                             Log.d(TAG, "uts " + x + " " + column[8].trim());
                             Log.d(TAG, "uts " + x + " " + column[9].trim());
@@ -433,6 +300,7 @@ public class JadwalFragment extends Fragment {
                 //}
             }
         }
+        Log.d(TAG, "getJadwal: total ke:"+ke);
 
         Call<JadwalResponse> call = service.getJadwalUAS();
         //jadwalKu.clear();
