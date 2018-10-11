@@ -1,7 +1,9 @@
 package poros.filkom.ub.jadwalujianfilkom
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
@@ -33,6 +35,11 @@ class HomeActivity  : AppCompatActivity(), BottomNavigationView.OnNavigationItem
         bottomNavigation = findViewById(R.id.bottom_navigation)
         initBottomNavigation()
         initFragment(savedInstanceState)
+        //floating button alarm
+        val myfab = findViewById(R.id.fab) as FloatingActionButton
+        myfab.setOnClickListener { val intent = Intent(this@HomeActivity, AlarmActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
